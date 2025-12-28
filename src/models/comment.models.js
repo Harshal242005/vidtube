@@ -8,12 +8,12 @@ const commentSchema = new Schema(
       required: true,
     },
     video: {
-      type: String.Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: "Video",
     },
-    
+
     owner: {
-      type: String.Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: "User",
     },
   },

@@ -20,7 +20,7 @@ const videoSchema = new Schema({
   },
   views: {
     type: Number,
-    required: true,
+    default: 0,
   },
   duration: {
     type: Number,
@@ -33,6 +33,7 @@ const videoSchema = new Schema({
   owner: {
     type: Schema.Types.ObjectId,
     ref:"User",
+    required: true,
   },
 },
  {timestamps: true}

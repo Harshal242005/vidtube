@@ -33,22 +33,65 @@ const uploadOnCloudinary = async(localFilePath) => {
 
 
     } catch (error) {
-        fs.unlinkSync(localFilePath)
-        return null
+        console.error("Cloudinary upload error:", error);
+        if (fs.existsSync(localFilePath)) {
+          fs.unlinkSync(localFilePath);
+        }        
+                throw new Error(
+                  `Failed to upload file to Cloudinary: ${error.message}`
+                );
     }
 }
 
-const deleteFromCloudinary = async (publicId) => {
+const deleteImageToCloudinary = async (cloudinaryFilePath) => {
     try {
-        const result = await cloudinary.uploader.destroy(publicId)
-        console.log("deleted from cloudinary. Public id", publicId);
+        if(!cloudinaryFilePath){
+            return null
+        }
+        
+        const filePath = cloudinaryFilePath.split("/");
+        const fileName = filePath[filePath.length - 1].split(".")[0]; //getting public id
+        
+
+        return await cloudinary.uploader.destroy(fileName,
+            {resource_type:"image"},
+            (err, _) =>{
+                if(err){
+                    console.log("error deleting from cloudinary ", err);
+                    return null
+                }
+            }
+
+        )
         
     } catch (error) {
-        console.log("error deleting from cloudinary ", error);
+        console.log("error deleting from cloud  inary ", error);
         return null
     }
 }
 
+const deleteVideoToCloudinary = async (cloudinaryFilePath) => {
+  try {
+    if (!cloudinaryFilePath) return null;
+
+    const filePath = cloudinaryFilePath.split("/");
+    const fileName = filePath[filePath.length - 1].split(".")[0];
+
+    return await cloudinary.uploader.destroy(
+      fileName,
+      { resource_type: "video" },
+      (err, _) => {
+        if (err) {
+          console.error("Error deleting file:", err);
+        }
+      }
+    );
+  } catch (e) {
+    console.log("Error deleting cloudinary file: " + e.message);
+  }
+};
 
 
-export {uploadOnCloudinary, deleteFromCloudinary}
+
+
+export { uploadOnCloudinary, deleteImageToCloudinary, deleteVideoToCloudinary };

@@ -11,4 +11,4 @@ const asynchandler = (requestHandler) => {
 
 
 
-export {asynchandler}
+export { asynchandler };
